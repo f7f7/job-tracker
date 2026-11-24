@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import socket
 import subprocess
 import sys
@@ -110,6 +111,7 @@ def plan_update(row: dict, ext: dict, day: datetime, link: str) -> dict:
 
     if ext["deadline"]:
         u["Deadline"] = ext["deadline"]
+    ext["location"] = city(ext["location"])
     for prop, key in (("Job ID", "job_id"), ("URL", "jd_url"), ("Location", "location"),
                       ("Company", "company"), ("Name", "job_title")):
         if ext[key] and not row.get(prop):
@@ -119,6 +121,11 @@ def plan_update(row: dict, ext: dict, day: datetime, link: str) -> dict:
     if ext["confidence"] != "high":
         flag(u, row.get("Review note"), day, ext["review_reason"] or "AI was not confident")
     return u
+
+
+def city(location: str) -> str:
+    """Guard for the prompt rule: 'Hamburg, Germany (Hybrid)' -> 'Hamburg'."""
+    return re.sub(r"\(.*?\)", "", location).split(",")[0].strip()
 
 
 def plan_create(ext: dict, email: dict, day: datetime, link: str) -> dict:
@@ -132,7 +139,7 @@ def plan_create(ext: dict, email: dict, day: datetime, link: str) -> dict:
         "Email link": link,
         "Job ID": ext["job_id"],
         "URL": ext["jd_url"],
-        "Location": ext["location"],
+        "Location": city(ext["location"]),
         "Deadline": ext["deadline"],
         "Needs review": False,
     }

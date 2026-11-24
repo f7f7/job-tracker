@@ -50,7 +50,8 @@ For the email, decide:
   No change = job-related but none of the above (e.g. generic update, reminder of an existing OA).
 - job_id: requisition / job ID (e.g. JR0288222, R-12345) if present.
 - jd_url: a link to the public job posting itself if the email contains one; not login, portal, unsubscribe or tracking links.
-- location: only if the email states it.
+- location: the city only, in English (e.g. "Munich" not "München", "Hamburg" not "Hamburg, Germany (Hybrid)");
+  no country, region, street or work mode (Hybrid/Remote/On-site). Only if the email states it, else empty.
 - deadline: due date of an OA/task or interview date as YYYY-MM-DD, else empty.
 - event: only used when status is "No change": a 2-4 word English note for the timeline, e.g. "OA reminder", "Still in review"; else empty.
 - match_page_id: the id of the tracker row this email is about, or empty if it is a new application not in the tracker.

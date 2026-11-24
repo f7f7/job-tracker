@@ -104,8 +104,7 @@ class Notion:
         if t in ("title", "rich_text"):
             return {t: _text_chunks(str(value))}
         if t in ("select", "status"):
-            # Notion rejects commas in option names, e.g. "Hamburg, Germany" -> "Hamburg - Germany"
-            return {t: {"name": str(value).replace(",", " -")[:100]} if value else None}
+            return {t: {"name": value} if value else None}
         if t == "multi_select":
             return {t: [{"name": x.strip()} for x in str(value).split(",") if x.strip()]}
         if t == "date":
